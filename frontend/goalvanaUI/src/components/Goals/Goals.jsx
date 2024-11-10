@@ -145,7 +145,17 @@ export default function CustomizedAccordions() {
               <Grid item xs={12} sm={6} md={4} key={item}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">Task {item}</Typography>
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                      <Typography variant="h6">Task {item}</Typography>
+                      <Box>
+                        <IconButton size="small" onClick={() => handleEdit(item)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton size="small" onClick={() => handleDelete(item)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
                     <Typography variant="body2" color="text.secondary">
                       Description for task {item}.
                     </Typography>
@@ -171,7 +181,17 @@ export default function CustomizedAccordions() {
               <Grid item xs={12} sm={6} md={4} key={item}>
                 <Card>
                   <CardContent>
-                    <Typography variant="h6">Task {item}</Typography>
+                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                      <Typography variant="h6">Task {item}</Typography>
+                      <Box>
+                        <IconButton size="small" onClick={() => handleEdit(item)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton size="small" onClick={() => handleDelete(item)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Box>
+                    </Box>
                     <Typography variant="body2" color="text.secondary">
                       Description for task {item}.
                     </Typography>
