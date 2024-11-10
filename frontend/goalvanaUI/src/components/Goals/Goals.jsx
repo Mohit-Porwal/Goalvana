@@ -62,9 +62,11 @@ const CircleIconWrapper = styled(Box)(({ theme }) => ({
   marginRight: theme.spacing(0), // Adds spacing between the circle and text
 }));
 
-export default function CustomizedAccordions() {
+export default function Goals() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('');
+  const [goalName, setGoalName] = useState('');
+  const [goalDescription, setGoalDescription] = useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,6 +79,30 @@ export default function CustomizedAccordions() {
   const handleChange = (event) => {
     setStatus(event.target.value);
   }
+
+  const handleCreateGoal = () => {
+    const goalData = {
+      name: goalName,
+      description: goalDescription,
+      status: status,
+    };
+
+    fetch('https://your-backend-api.com/goals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(goalData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Goal created:', data);
+        setOpen(false); // Close the dialog on successful submission
+      })
+      .catch((error) => {
+        console.error('Error creating goal:', error);
+      });
+  };
 
   return (
     <Box
@@ -129,7 +155,7 @@ export default function CustomizedAccordions() {
           <Button onClick={handleClose} color="primary" sx={{ textTransform: 'none', fontSize: 20 }}>
               Cancel
           </Button>
-          <Button onClick={handleClose} color="primary" sx={{ textTransform: 'none', fontSize: 20 }}>
+          <Button onClick={handleCreateGoal} color="primary" sx={{ textTransform: 'none', fontSize: 20 }}>
               Let's do this!
           </Button>
         </DialogActions>

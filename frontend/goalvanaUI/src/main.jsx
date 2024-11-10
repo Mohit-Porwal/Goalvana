@@ -10,7 +10,7 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: '/goals',
+    path: '/:goalType/goals',
     element: <GoalsPage/ >
   }
 ])
