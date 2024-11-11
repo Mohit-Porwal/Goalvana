@@ -70,12 +70,69 @@ def create_goalTypes():
 
 @app.route("/goalTypes", methods=["PUT"])
 def update_goalTypes():
-    pass
+    user_id = request.args.get("user_id")
+    data = request.json
+
+    goal_type_id = data.get("goal_type_id")
+    updated_goal_type = data.get("goal_type")
+
+    if not goal_type_id or not updated_goal_type:
+        return jsonify({"error": "Goal type ID and updated goal type are required"}), 400
+
+    cur = mysql.connection.cursor()
+    try:
+        # Update the goal type in the database
+        cur.execute(
+            'UPDATE goal_types SET goal_type = %s WHERE goal_type_id = %s AND user_id = %s',
+            (updated_goal_type, goal_type_id, user_id)
+        )
+        mysql.connection.commit()
+
+        # Check if the update affected any rows
+        if cur.rowcount == 0:
+            return jsonify({"error": "No matching goal type found or no changes made"}), 404
+
+    except Exception as e:
+        mysql.connection.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+
+    return jsonify({"message": "Goal type updated successfully"})
 
 
 @app.route("/goalTypes", methods=["DELETE"])
 def delete_goalTypes():
-    pass
+    user_id = request.args.get("user_id")
+    data = request.json
+
+    goal_type_id = data.get("goal_type_id")
+
+    if not goal_type_id:
+        return jsonify({"error": "Goal type ID is required"}), 400
+
+    cur = mysql.connection.cursor()
+    try:
+        # Delete the goal type from the database
+        cur.execute(
+            'DELETE FROM goal_types WHERE goal_type_id = %s AND user_id = %s',
+            (goal_type_id, user_id)
+        )
+        mysql.connection.commit()
+
+        # Check if the delete operation affected any rows
+        if cur.rowcount == 0:
+            return jsonify({"error": "No matching goal type found"}), 404
+
+    except Exception as e:
+        mysql.connection.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+
+    return jsonify({"message": "Goal type deleted successfully"})
+
+
 
 
 @app.route("/<goalType>/goals", methods=["GET"])
@@ -97,3 +154,6 @@ def delete_goals():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+
