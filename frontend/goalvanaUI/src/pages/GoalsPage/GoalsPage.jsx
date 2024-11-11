@@ -1,6 +1,5 @@
 import React from "react";
 import Goals from '../../components/Goals/Goals.jsx';
-import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 export default function GoalsPage() {

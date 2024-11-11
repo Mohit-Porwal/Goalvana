@@ -62,11 +62,12 @@ const CircleIconWrapper = styled(Box)(({ theme }) => ({
   marginRight: theme.spacing(0), // Adds spacing between the circle and text
 }));
 
-export default function Goals() {
+export default function Goals( { goalTypeId } ) {
   const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState('');
-  const [goalName, setGoalName] = useState('');
+  const [goalStatus, setGoalStatus] = useState('');
+  const [goalTitle, setGoalTitle] = useState('');
   const [goalDescription, setGoalDescription] = useState('');
+  const [goalData, setGoalData] = useState();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,12 +82,15 @@ export default function Goals() {
   }
 
   const handleCreateGoal = () => {
-    const goalData = {
-      name: goalName,
-      description: goalDescription,
-      status: status,
+    const goal = {
+      goalTitle: goalTitle,
+      goalDescription: goalDescription,
+      goalStatus: goalStatus,
+      goalTypeId: goalTypeId,
     };
 
+    setGoalData(goal);
+    
     fetch('https://your-backend-api.com/goals', {
       method: 'POST',
       headers: {
@@ -127,6 +131,8 @@ export default function Goals() {
               label="What's your next goal?"
               fullWidth
               variant="outlined"
+              value={goalTitle}
+              onChange={(e) => setGoalTitle(e.target.value)}
           />
           <TextField
               margin="dense"
@@ -135,15 +141,17 @@ export default function Goals() {
               variant="outlined"
               multiline
               rows={4}
+              value={goalDescription}
+              onChange={(e) => setGoalDescription(e.target.value)}
           />
           <FormControl fullWidth sx={{marginTop: '10px'}}>
             <InputLabel id="demo-simple-select-label">Status</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={status}
+              value={goalStatus}
               label="Status"
-              onChange={handleChange}
+              onChange={(e) => setGoalStatus(e.target.value)}
             >
               <MenuItem value={'Not Started'}>Not Started</MenuItem>
               <MenuItem value={'In Progress'}>In Progress</MenuItem>
@@ -167,7 +175,7 @@ export default function Goals() {
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            {[1, 2, 3].map((item) => (
+            {[1].map((item) => (
               <Grid item xs={12} sm={6} md={4} key={item}>
                 <Card>
                   <CardContent>
@@ -203,7 +211,7 @@ export default function Goals() {
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            {[4, 5, 6, 7, 8].map((item) => (
+            {[4].map((item) => (
               <Grid item xs={12} sm={6} md={4} key={item}>
                 <Card>
                   <CardContent>
@@ -239,7 +247,7 @@ export default function Goals() {
         </AccordionSummary>
         <AccordionDetails>
           <Grid container spacing={2}>
-            {[6, 7, 8].map((item) => (
+            {[6].map((item) => (
               <Grid item xs={12} sm={6} md={4} key={item}>
                 <Card>
                   <CardContent>
