@@ -41,7 +41,6 @@
 import React, { useState, useEffect } from "react";
 import GoalTypes from '../../components/GoalTypes/GoalTypes.jsx';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 
 export default function HomePage() {
 

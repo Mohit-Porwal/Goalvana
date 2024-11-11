@@ -6,13 +6,14 @@ export default function GoalsPage() {
 
     const location = useLocation();
     const goalTypeId = location.state?.goalTypeId;
+    const goalType = location.state?.goalType;
 
     return (
     <div>
-        <h1>Goals</h1>
+        <h1>{goalType ? `${goalType} Goals` : 'Goals'}</h1>
         {goalTypeId ? (
             <>
-                <Goals goalTypeId={goalTypeId}/>
+                <Goals goalTypeId={goalTypeId} goalType={goalType}/>
             </>
         ) : null}
     </div>

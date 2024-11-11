@@ -62,12 +62,11 @@ const CircleIconWrapper = styled(Box)(({ theme }) => ({
   marginRight: theme.spacing(0), // Adds spacing between the circle and text
 }));
 
-export default function Goals( { goalTypeId } ) {
+export default function Goals( { goalTypeId, goalType } ) {
   const [open, setOpen] = useState(false);
   const [goalStatus, setGoalStatus] = useState('');
   const [goalTitle, setGoalTitle] = useState('');
   const [goalDescription, setGoalDescription] = useState('');
-  const [goalData, setGoalData] = useState();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,21 +81,20 @@ export default function Goals( { goalTypeId } ) {
   }
 
   const handleCreateGoal = () => {
-    const goal = {
-      goalTitle: goalTitle,
-      goalDescription: goalDescription,
-      goalStatus: goalStatus,
-      goalTypeId: goalTypeId,
+    const newGoal = {
+      user_id: 1,
+      goal_title: goalTitle,
+      goal_description: goalDescription,
+      goal_status: goalStatus,
+      goal_type_id: goalTypeId,
     };
-
-    setGoalData(goal);
     
-    fetch('https://your-backend-api.com/goals', {
+    fetch(`http://127.0.0.1:5000/${goalType}/goals?user_id=1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(goalData),
+      body: JSON.stringify(newGoal),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -123,7 +121,7 @@ export default function Goals( { goalTypeId } ) {
     >
       <Button sx={{ml: 'auto', textTransform: 'none'}} startIcon={<CircleIconWrapper>+</CircleIconWrapper>} onClick={handleClickOpen}>Add Goals</Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Set your next Goal!</DialogTitle>
+        <DialogTitle>Set your next {goalType} Goal!</DialogTitle>
         <DialogContent>
           <TextField
               autoFocus

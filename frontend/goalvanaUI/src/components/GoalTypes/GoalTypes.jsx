@@ -84,7 +84,7 @@ const Goals = ({ goalTypeId, goalType, onEdit, onDelete }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/${goalType}/goals`, { state: { goalTypeId: goalTypeId } });
+    navigate(`/${goalType}/goals`, { state: { goalTypeId: goalTypeId, goalType: goalType } });
   };
 
   const handleEdit = async () => {
