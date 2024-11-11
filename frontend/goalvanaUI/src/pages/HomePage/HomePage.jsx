@@ -82,7 +82,7 @@ export default function HomePage() {
     }
 
     try {
-      const response = await fetch('http://127.0.0.1:5000?user_id=1', {
+      const response = await fetch('http://127.0.0.1:5000/goalTypes?user_id=1', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -108,16 +108,6 @@ export default function HomePage() {
   return (
     <div>
       <h1>Your Goals</h1>
-      {/* <Button
-        variant="contained"
-        color="primary"
-        startIcon={<AddIcon />}
-        onClick={handleOpenDialog}
-        sx={{ mb: 2 }}
-      >
-        Add Goal Type
-      </Button> */}
-
       {/* Dialog for entering new goal type */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Add New Goal Type</DialogTitle>
