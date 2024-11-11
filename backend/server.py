@@ -133,15 +133,56 @@ def delete_goalTypes():
     return jsonify({"message": "Goal type deleted successfully"})
 
 
-
-
 @app.route("/<goalType>/goals", methods=["GET"])
 def get_goals():
     pass
 
 @app.route("/<goalType>/goals", methods=["POST"])
-def create_goals():
-    pass
+def create_goals(goalType):
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+
+    # Extract goal data from the request JSON payload
+    data = request.json
+    goal_title = data.get("goal_title")
+    goal_description = data.get("goal_description")
+    goal_status = data.get("goal_status")
+    goal_type_id = data.get("goal_type_id")
+
+    if not all([goal_title, goal_description, goal_status, goal_type_id]):
+        return jsonify({"error": "All goal data is required"}), 400
+
+    try:
+        cur = mysql.connection.cursor()
+        
+        # Insert the new goal into the goals table
+        cur.execute(
+            '''
+            INSERT INTO goals (user_id, goal_type_id, goal_title, goal_description, goal_status)
+            VALUES (%s, %s, %s, %s, %s)
+            ''',
+            (user_id, goal_type_id, goal_title, goal_description, goal_status)
+        )
+        
+        # Commit changes and get the ID of the newly inserted goal
+        mysql.connection.commit()
+        new_goal_id = cur.lastrowid
+    
+        return jsonify({
+            "goal_id": new_goal_id,
+            "user_id": user_id,
+            "goal_type_id": goal_type_id,
+            "goal_title": goal_title,
+            "goal_description": goal_description,
+            "goal_status": goal_status,
+        }), 201
+
+    except Exception as e:
+        mysql.connection.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
 
 @app.route("/<goalType>/goals", methods=["PUT"])
 def update_goals():
