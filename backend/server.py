@@ -132,10 +132,56 @@ def delete_goalTypes():
 
     return jsonify({"message": "Goal type deleted successfully"})
 
-
 @app.route("/<goalType>/goals", methods=["GET"])
-def get_goals():
-    pass
+def get_goals(goalType):
+
+    user_id = request.args.get("user_id")
+    goal_type_id = request.args.get("goal_type_id")
+
+    if not user_id:
+        return jsonify({"error": "User ID is required"}), 400
+    if not goal_type_id:
+        return jsonify({"error": "Goal type ID is required"}), 400
+
+    try:
+        cur = mysql.connection.cursor()
+
+        query = '''
+            SELECT goal_id, user_id, goal_type_id, goal_title, goal_description, goal_status
+            FROM goals
+            WHERE user_id = %s AND goal_type_id = %s
+        '''
+        cur.execute(query, (user_id, goal_type_id))
+        goals = cur.fetchall()
+
+        # Group goals based on their status
+        goals_by_status = {
+            "Not started": [],
+            "In Progress": [],
+            "Completed": []
+        }
+
+        for goal in goals:
+            goal_data = {
+                "goal_id": goal[0],
+                "user_id": goal[1],
+                "goal_type_id": goal[2],
+                "goal_title": goal[3],
+                "goal_description": goal[4],
+                "goal_status": goal[5],
+            }
+
+            if goal_data["goal_status"] in goals_by_status:
+                goals_by_status[goal_data["goal_status"]].append(goal_data)
+
+        return jsonify(goals_by_status), 200
+
+    except Exception as e:
+        mysql.connection.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cur.close()
+
 
 @app.route("/<goalType>/goals", methods=["POST"])
 def create_goals(goalType):
