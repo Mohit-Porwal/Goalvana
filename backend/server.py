@@ -231,12 +231,89 @@ def create_goals(goalType):
         cur.close()
 
 @app.route("/<goalType>/goals", methods=["PUT"])
-def update_goals():
-    pass
+def update_goals(goalType):
+    """
+    Updates a goal based on the provided data. Expects the goal ID to identify which goal to update.
+    """
+    data = request.json
+
+    # Validate required fields
+    goal_id = data.get("goal_id")
+    if not goal_id:
+        return jsonify({"error": "Goal ID is required"}), 400
+
+    user_id = data.get("user_id")
+    goal_title = data.get("goal_title")
+    goal_description = data.get("goal_description")
+    goal_status = data.get("goal_status")
+
+    # Ensure at least one field is provided to update
+    if not any([goal_title, goal_description, goal_status]):
+        return jsonify({"error": "At least one field to update is required"}), 400
+
+    try:
+        cur = mysql.connection.cursor()
+
+        # Build the query dynamically based on the provided fields
+        update_fields = []
+        params = []
+
+        if goal_title:
+            update_fields.append("goal_title = %s")
+            params.append(goal_title)
+        if goal_description:
+            update_fields.append("goal_description = %s")
+            params.append(goal_description)
+        if goal_status:
+            update_fields.append("goal_status = %s")
+            params.append(goal_status)
+
+        # Add updated_at field
+        update_fields.append("updated_at = NOW()")
+
+        # Finalize query
+        params.append(goal_id)
+        params.append(user_id)
+        query = f"UPDATE goals SET {', '.join(update_fields)} WHERE goal_id = %s AND user_id = %s"
+
+        cur.execute(query, tuple(params))
+        mysql.connection.commit()
+
+        return jsonify({"message": "Goal updated successfully"}), 200
+
+    except Exception as e:
+        print("Error updating goal:", e)
+        return jsonify({"error": "An error occurred while updating the goal"}), 500
+
 
 @app.route("/<goalType>/goals", methods=["DELETE"])
-def delete_goals():
-    pass
+def delete_goals(goalType):
+    """
+    Deletes a goal based on the provided goal ID.
+    """
+    goal_id = request.args.get("goal_id")
+    user_id = request.args.get("user_id")
+
+    if not goal_id or not user_id:
+        return jsonify({"error": "Goal ID and User ID are required"}), 400
+
+    try:
+        cur = mysql.connection.cursor()
+
+        # Delete the goal
+        query = "DELETE FROM goals WHERE goal_id = %s AND user_id = %s"
+        cur.execute(query, (goal_id, user_id))
+        mysql.connection.commit()
+
+        if cur.rowcount == 0:
+            return jsonify({"message": "No goal found with the provided ID"}), 404
+
+        return jsonify({"message": "Goal deleted successfully"}), 200
+
+    except Exception as e:
+        print("Error deleting goal:", e)
+        return jsonify({"error": "An error occurred while deleting the goal"}), 500
+
 
 
 if __name__ == "__main__":
