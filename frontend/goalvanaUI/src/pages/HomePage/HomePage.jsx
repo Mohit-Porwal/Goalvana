@@ -48,22 +48,24 @@ export default function HomePage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [newGoalType, setNewGoalType] = useState("");
 
+  // Call fetchData in useEffect to fetch data when the component mounts
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://127.0.0.1:5000?user_id=1'); 
-        const result = await response.json();
-        const goalTypesArray = result.goal_types.map(goal => ({
-          goal_type_id: goal.goal_type_id,
-          goalType: goal.goal_type
-        }));
-        setData(goalTypesArray);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-    fetchData();
+    fetchData(); // This ensures data is fetched when the component mounts
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000?user_id=1');
+      const result = await response.json();
+      const goalTypesArray = result.goal_types.map(goal => ({
+        goal_type_id: goal.goal_type_id,
+        goalType: goal.goal_type
+      }));
+      setData(goalTypesArray);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -91,10 +93,11 @@ export default function HomePage() {
 
       if (response.ok) {
         const result = await response.json();
-        setData(prevData => [...prevData, {
-          goal_type_id: result.goal_type_id,
-          goalType: result.goal_type
-        }]);
+        // setData(prevData => [...prevData, {
+        //   goal_type_id: result.goal_type_id,
+        //   goalType: result.goal_type
+        // }]);
+        await fetchData();
         handleCloseDialog();
       } else {
         console.error("Failed to add new goal type");
