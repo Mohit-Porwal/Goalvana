@@ -70,7 +70,16 @@ const Goals = ({ goalTypeId, goalType, onEdit, onDelete }) => {
   };
 
   return (
-    <Card variant="outlined" sx={{ width: 300, height: 200, textAlign: 'center', p: 1, borderRadius: '10px' }}>
+    <Card variant="outlined" 
+    sx={{ 
+      width: 350, 
+      height: 250, 
+      textAlign: 'center', 
+      p: 1, 
+      borderRadius: '10px', 
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography sx={{ textAlign: 'left' }}>
@@ -118,10 +127,10 @@ export default function GoalTypes({ goalTypes, handleOpenDialog }) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3, mx: 'auto', maxWidth: '1200px' }}>
+    <Box sx={{ flexGrow: 1, p: 10, mx: 'auto', maxWidth: '1200px' }}>
       <Grid container rowSpacing={4} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={4}>
-          <Card variant="outlined" sx={{ width: 315, height: 215, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
+          <Card variant="outlined" sx={{ width: 365, height: 265, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px', }}>
             <IconButton color="primary" onClick={handleOpenDialog}>
               <AddIcon />
             </IconButton>

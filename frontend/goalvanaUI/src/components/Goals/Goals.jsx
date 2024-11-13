@@ -198,7 +198,6 @@ export default function Goals({ goalTypeId, goalType }) {
       });
   };
   
-  
   const handleDeleteGoal = (goalId, goalStatus) => {
     fetch(`http://127.0.0.1:5000/${goalType}/goals?user_id=1&goal_id=${goalId}`, {
       method: 'DELETE',
@@ -221,6 +220,44 @@ export default function Goals({ goalTypeId, goalType }) {
       });
   };
 
+  const moveGoal = (goal, newStatus) => {
+    // Update the status of the goal
+    const updatedGoal = {
+      ...goal,
+      goal_status: newStatus,
+    };
+  
+    fetch(`http://127.0.0.1:5000/${goalType}/goals?user_id=1`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedGoal),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Goal status updated:', data);
+        // Update the state to reflect the moved goal
+        setGoalsByStatus((prevGoals) => {
+          const newGoals = { ...prevGoals };
+          // Remove the goal from the old status list
+          const oldStatusGoals = newGoals[goal.goal_status] || [];
+          newGoals[goal.goal_status] = oldStatusGoals.filter(g => g.goal_id !== goal.goal_id);
+  
+          // Add the updated goal to the new status list
+          if (!newGoals[newStatus]) {
+            newGoals[newStatus] = [];
+          }
+          newGoals[newStatus].push(updatedGoal);
+  
+          return newGoals;
+        });
+      })
+      .catch((error) => {
+        console.error('Error updating goal status:', error);
+      });
+  };
+  
   const renderGoalsByStatus = (status) => {
     const goals = goalsByStatus[status] || [];
     return goals.map((goal) => (
@@ -243,13 +280,71 @@ export default function Goals({ goalTypeId, goalType }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Move to In Progress</Button>
-            <Button size="small">Move to Completed</Button>
+            {status === 'Completed' && (
+              <>
+                <Button size="small" onClick={() => moveGoal(goal, 'In Progress')}>
+                  Move to In Progress
+                </Button>
+                <Button size="small" onClick={() => moveGoal(goal, 'Not started')}>
+                  Move to Not Started
+                </Button>
+              </>
+            )}
+            {status === 'Not started' && (
+              <>
+                <Button size="small" onClick={() => moveGoal(goal, 'In Progress')}>
+                  Move to In Progress
+                </Button>
+                <Button size="small" onClick={() => moveGoal(goal, 'Completed')}>
+                  Move to Completed
+                </Button>
+              </>
+            )}
+            {status === 'In Progress' && (
+              <>
+                <Button size="small" onClick={() => moveGoal(goal, 'Completed')}>
+                  Move to Completed
+                </Button>
+                <Button size="small" onClick={() => moveGoal(goal, 'Not started')}>
+                  Move to Not Started
+                </Button>
+              </>
+            )}
           </CardActions>
         </Card>
       </Grid>
     ));
   };
+  
+  // const renderGoalsByStatus = (status) => {
+  //   const goals = goalsByStatus[status] || [];
+  //   return goals.map((goal) => (
+  //     <Grid item xs={12} sm={6} md={4} key={goal.goal_id}>
+  //       <Card>
+  //         <CardContent>
+  //           <Box display="flex" justifyContent="space-between" alignItems="center">
+  //             <Typography variant="h6">{goal.goal_title}</Typography>
+  //             <Box>
+  //               <IconButton size="small" onClick={() => handleEditGoal(goal)}>
+  //                 <EditIcon />
+  //               </IconButton>
+  //               <IconButton size="small" onClick={() => handleDeleteGoal(goal.goal_id, goal.goal_status)}>
+  //                 <DeleteIcon />
+  //               </IconButton>
+  //             </Box>
+  //           </Box>
+  //           <Typography variant="body2" color="text.secondary">
+  //             {goal.goal_description}
+  //           </Typography>
+  //         </CardContent>
+  //         <CardActions>
+  //           <Button size="small">Move to In Progress</Button>
+  //           <Button size="small">Move to Completed</Button>
+  //         </CardActions>
+  //       </Card>
+  //     </Grid>
+  //   ));
+  // };
 
   return (
     <Box

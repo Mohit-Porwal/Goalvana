@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import GoalTypes from '../../components/GoalTypes/GoalTypes.jsx';
+import NavBar from '../../components/NavBar/NavBar.jsx';
+import HomePageTabs from '../../components/HomePageTabs/HomePageTabs.jsx';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import '../../global.css';
 
 export default function HomePage() {
 
@@ -53,10 +56,6 @@ export default function HomePage() {
 
       if (response.ok) {
         const result = await response.json();
-        // setData(prevData => [...prevData, {
-        //   goal_type_id: result.goal_type_id,
-        //   goalType: result.goal_type
-        // }]);
         await fetchData();
         handleCloseDialog();
       } else {
@@ -69,7 +68,8 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1>Your Goals</h1>
+      <NavBar/>
+      <HomePageTabs/>
       {/* Dialog for entering new goal type */}
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Add New Goal Type</DialogTitle>
