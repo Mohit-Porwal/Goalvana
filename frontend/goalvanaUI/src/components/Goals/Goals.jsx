@@ -68,7 +68,7 @@ export default function Goals({ goalTypeId, goalType }) {
   const [goalTitle, setGoalTitle] = useState('');
   const [goalDescription, setGoalDescription] = useState('');
   const [goalsByStatus, setGoalsByStatus] = useState([]);
-  const [editingGoal, setEditingGoal] = useState(false);
+  const [editingGoal, setEditingGoal] = useState({});
 
   useEffect(() => {
     const fetchGoals = async () => {
@@ -84,6 +84,10 @@ export default function Goals({ goalTypeId, goalType }) {
   }, [goalType]); // Optionally add `goalType` as a dependency if it can change
   
   const handleClickOpen = () => {
+    setGoalTitle('');
+    setGoalDescription('');
+    setGoalStatus('');
+    setEditingGoal(null); // Ensure no goal is being edited
     setOpen(true);
   };
 
@@ -134,50 +138,9 @@ export default function Goals({ goalTypeId, goalType }) {
     setEditingGoal(goal); // New state to track the goal being edited
     setOpen(true); // Open the dialog for editing
   };
-  
-  // const handleSaveEdit = () => {
-  //   const updatedGoal = {
-  //     goal_id: editingGoal.goal_id,
-  //     user_id: 1, // Assuming a hardcoded user_id as mentioned earlier
-  //     goal_title: goalTitle,
-  //     goal_description: goalDescription,
-  //     goal_status: goalStatus,
-  //     goal_type_id: goalTypeId,
-  //   };
-  
-  //   fetch(`http://127.0.0.1:5000/${goalType}/goals?user_id=1`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(updatedGoal),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       console.log('Goal updated:', data);
-  //       // Update the state with the edited goal
-  //       setGoalsByStatus((prevGoals) => {
-  //         const newGoals = { ...prevGoals };
-  //         const statusArray = newGoals[editingGoal.goal_status] || [];
-  //         // Remove old goal data
-  //         newGoals[editingGoal.goal_status] = statusArray.filter(g => g.goal_id !== editingGoal.goal_id);
-  //         // Add updated goal to the new status or retain in the same status
-  //         if (goalStatus !== editingGoal.goal_status) {
-  //           newGoals[goalStatus] = [...(newGoals[goalStatus] || []), data];
-  //         } else {
-  //           newGoals[editingGoal.goal_status] = [...statusArray, data];
-  //         }
-  //         return newGoals;
-  //       });
-  //       handleClose(); // Close dialog on successful save
-  //       setEditingGoal(null); // Reset editing state
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error updating goal:', error);
-  //     });
-  // };
 
   const handleSaveEdit = () => {
+    console.log("Inside "+JSON.stringify(editingGoal));
     const updatedGoal = {
       goal_id: editingGoal.goal_id,
       user_id: 1, // Assuming a hardcoded user_id as mentioned earlier
@@ -186,7 +149,9 @@ export default function Goals({ goalTypeId, goalType }) {
       goal_status: goalStatus,
       goal_type_id: goalTypeId,
     };
-  
+    
+    console.log("Goal id "+ updatedGoal.goal_id);
+    
     fetch(`http://127.0.0.1:5000/${goalType}/goals?user_id=1`, {
       method: 'PUT',
       headers: {
@@ -201,7 +166,9 @@ export default function Goals({ goalTypeId, goalType }) {
         // Update the state with the edited goal
         setGoalsByStatus((prevGoals) => {
           const newGoals = { ...prevGoals };
-  
+          
+          console.log("New Goals "+ JSON.stringify(newGoals));
+
           // 1. Remove the goal from the old status
           const oldStatusGoals = newGoals[editingGoal.goal_status] || [];
           newGoals[editingGoal.goal_status] = oldStatusGoals.filter(g => g.goal_id !== editingGoal.goal_id);
@@ -210,10 +177,11 @@ export default function Goals({ goalTypeId, goalType }) {
           if (!newGoals[goalStatus]) {
             newGoals[goalStatus] = [];
           }
-  
+          console.log("Data  "+ JSON.stringify(data));
+
           // Add updated goal data into the correct status
           newGoals[goalStatus].push({
-            ...data,
+            ...updatedGoal,
             goal_title: goalTitle,   // Ensure the title is updated
             goal_description: goalDescription,  // Ensure the description is updated
           });
@@ -223,6 +191,7 @@ export default function Goals({ goalTypeId, goalType }) {
   
         handleClose(); // Close dialog on successful save
         setEditingGoal(null); // Reset editing state
+        console.log("Editing "+ JSON.stringify(editingGoal));
       })
       .catch((error) => {
         console.error('Error updating goal:', error);
