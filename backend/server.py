@@ -315,6 +315,65 @@ def delete_goals(goalType):
         return jsonify({"error": "An error occurred while deleting the goal"}), 500
 
 
+@app.route("/goalInsights", methods=["GET"])
+def get_goal_insights():
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "Missing user_id"}), 400
+    
+    try:
+        cur = mysql.connection.cursor()
+        
+        # Queries to count total goal types and goals
+        queries = {
+            "total_goal_types": "SELECT COUNT(goal_type_id) FROM goal_types WHERE user_id = %s",
+            "total_goals": "SELECT COUNT(goal_id) FROM goals WHERE user_id = %s",
+            "total_not_started": "SELECT COUNT(goal_status) FROM goals WHERE goal_status = %s AND user_id = %s",
+            "total_in_progress": "SELECT COUNT(goal_status) FROM goals WHERE goal_status = %s AND user_id = %s",
+            "total_completed": "SELECT COUNT(goal_status) FROM goals WHERE goal_status = %s AND user_id = %s"
+        }
+        
+        # Execute queries and store results
+        cur.execute(queries["total_goal_types"], (user_id,))
+        total_goal_types = cur.fetchone()[0]
+        
+        cur.execute(queries["total_goals"], (user_id,))
+        total_goals = cur.fetchone()[0]
+
+        statuses = {
+            "Not started": 0,
+            "In progress": 0,
+            "Completed": 0
+        }
+
+        for status in statuses:
+            cur.execute(queries[f"total_{status.lower().replace(' ', '_')}"], (status, user_id))
+            statuses[status] = cur.fetchone()[0]
+
+        # Calculate percentages
+        if total_goals > 0:
+            percent_of_not_started = (statuses["Not started"] / total_goals) * 100
+            percent_of_in_progress = (statuses["In progress"] / total_goals) * 100
+            percent_of_completed = (statuses["Completed"] / total_goals) * 100
+        else:
+            percent_of_not_started = percent_of_in_progress = percent_of_completed = 0
+
+        return jsonify({
+            "total_goal_types": total_goal_types,
+            "total_goals": total_goals,
+            "total_not_started": statuses["Not started"],
+            "total_in_progress": statuses["In progress"],
+            "total_completed": statuses["Completed"],
+            "percent_of_not_started": percent_of_not_started,
+            "percent_of_in_progress": percent_of_in_progress,
+            "percent_of_completed": percent_of_completed
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        cur.close()
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
