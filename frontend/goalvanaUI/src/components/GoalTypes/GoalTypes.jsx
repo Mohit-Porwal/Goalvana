@@ -127,7 +127,7 @@ export default function GoalTypes({ goalTypes, handleOpenDialog }) {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 10, mx: 'auto', maxWidth: '1200px' }}>
+    <Box sx={{ flexGrow: 1, p: 10, mx: 'auto', maxWidth: '1200px', width: '100%'}}>
       <Grid container rowSpacing={4} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={4}>
           <Card variant="outlined" sx={{ width: 365, height: 265, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px', }}>
