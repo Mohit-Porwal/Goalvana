@@ -106,7 +106,7 @@
 // }
 
 import React, { useState, useEffect } from "react";
-// import HomePageTabs from '../../components/HomePageTabs/HomePageTabs.jsx';
+import GoalInsights from "../../components/GoalInsights/GoalInsights.jsx";
 import NavBar from '../../components/NavBar/NavBar.jsx';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Tabs, Tab } from '@mui/material';
 import '../../global.css';
@@ -190,7 +190,7 @@ export default function HomePage() {
       {/* Conditional rendering based on selected tab */}
       {selectedTab === 0 ? (
         <div>
-          <h2>Goal Insights</h2>
+          <h2><GoalInsights /></h2>
         </div>
       ) : (
         data && (
