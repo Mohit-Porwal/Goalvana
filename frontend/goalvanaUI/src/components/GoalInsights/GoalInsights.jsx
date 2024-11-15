@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 
 const CustomCircularProgress = ({ value, color, size, strokeWidth }) => {
