@@ -22,7 +22,7 @@ const NavBar = () => {
         {/* Logo and App Name */}
         <Box display="flex" alignItems="center" sx={{ mr: 2 }}>
           <Avatar src={logo} alt="ScaleHood logo" sx={{ height: 40, width: 40, mr: 1 }} />
-          <Typography variant="h5" sx={{ color: '#FF3B30', fontWeight: 'bold' }}>Goalvana</Typography>
+          <Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold' }}>Goalvana</Typography>
         </Box>
         
         {/* Search Bar */}
@@ -41,7 +41,7 @@ const NavBar = () => {
         
         {/* User Greeting */}
         <Box sx={{ ml: 'auto' }}>
-          <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>Hi Mohit!</Typography>
+          <Typography variant="h6" sx={{ color: 'black', fontWeight: 700 }}>Hi Mohit!</Typography>
         </Box>
       </Toolbar>
     </AppBar>
