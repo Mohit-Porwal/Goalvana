@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import os
 import logging
 
+import requests
+
 app = Flask(__name__)
 CORS(app)
 mysql = MySQL(app)
@@ -18,6 +20,7 @@ app.config["MYSQL_HOST"] = os.getenv("MYSQL_HOST")
 app.config["MYSQL_USER"] = os.getenv("MYSQL_USER")
 app.config["MYSQL_PASSWORD"] = os.getenv("MYSQL_PASSWORD")
 app.config["MYSQL_DB"] = os.getenv("MYSQL_DB")
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
 @app.route("/", methods=["GET"])
 def home():
@@ -374,6 +377,27 @@ def get_goal_insights():
 
     finally:
         cur.close()
+
+@app.route('/api/openai', methods=['POST'])
+def call_openai():
+    data = request.json
+    prompt = data.get('prompt')
+
+    headers = {
+        'Authorization': f'Bearer {OPENAI_API_KEY}',
+        'Content-Type': 'application/json'
+    }
+    payload = {
+        'model': 'gpt-4o-mini',
+        'messages': [{'role': 'user', 'content': prompt}],
+        'max_tokens': 200
+    }
+
+    response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=payload)
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({'error': 'Failed to fetch OpenAI response'}), response.status_code
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
