@@ -12,7 +12,7 @@ export default function HomePage() {
   const [newGoalType, setNewGoalType] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
   const [motivationalQuotes, setMotivationalQuotes] = useState("");
-  const prompt = "Generate engaging and energizing motivational quotes to show on home screen of a goal tracking app. Make sure the quote is new everytime and do not repeat the previously generated quote";
+  const prompt = "Generate engaging and energizing motivational quotes to show on home screen of a goal tracking app.";
 
   // Call fetchData in useEffect to fetch data when the component mounts
   useEffect(() => {
@@ -20,8 +20,8 @@ export default function HomePage() {
     // Fetch motivational quote only once on component mount
     const fetchQuote = async () => {
       try {
-        const aiResponse = await fetchAIResponse(prompt);
-        setMotivationalQuotes(aiResponse);
+        // const aiResponse = await fetchAIResponse(prompt);
+        // setMotivationalQuotes(aiResponse);
       } catch (error) {
         console.error("Error fetching motivational quote:", error);
       }
@@ -86,32 +86,45 @@ export default function HomePage() {
   };
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <NavBar/>
 
             {/* Display AI-generated motivational quotes */}
       {motivationalQuotes && (
-        <div style={{ margin: '20px', padding: '10px', backgroundColor: '#f0f8ff', borderRadius: '5px' }}>
-          <h3>Motivational Quote</h3>
+        //<div style={{ marginTop: '10px', padding: '10px', backgroundColor: 'white' ,borderRadius: '5px', textAlign: 'center' }}>
+        <div
+        style={{
+          position: 'absolute',
+          top: '110px', // Adjust the top value to move it up or down independently
+          left: '50%',
+          transform: 'translateX(-50%)',
+          padding: '10px',
+          borderRadius: '5px',
+          textAlign: 'center',
+          zIndex: 1, // Ensure it appears above other content
+          fontWeight: 'bold',
+          color: '#3C4142',
+          fontSize: 30
+        }}
+      >  
           <p>{motivationalQuotes}</p>
         </div>
       )}
 
       {/* Tabs for switching between Goal Stats and Goal Categories */}
-      <Tabs sx={{marginTop: '100px', marginLeft: '10%', color: 'black'}} value={selectedTab} onChange={handleTabChange} >
-        <Tab label="Goal Stats" sx={{ color: 'black' }}/>
-        <Tab label="Goal Categories" sx={{ color: 'black' }}/>
+      <Tabs sx={{marginTop: '150px', marginLeft: '10%', color: 'black', }} value={selectedTab} onChange={handleTabChange} >
+        <Tab label="Goal Insights" sx={{ color: 'black', fontWeight: 'bold', textTransform: 'none', fontSize: 18 }}/>
+        <Tab label="Goal Categories" sx={{ color: 'black', fontWeight: 'bold', textTransform: 'none', fontSize: 18 }}/>
       </Tabs>
 
       {/* Conditional rendering based on selected tab */}
       {selectedTab === 0 ? (
         <div>
-          <h2><GoalInsights /></h2>
+          <GoalInsights />
         </div>
       ) : (
         data && (
           <>
-            {/* <HomePageTabs goalTypes={data} handleOpenDialog={handleOpenDialog}/> */}
             <GoalTypes goalTypes={data} handleOpenDialog={handleOpenDialog}/>
           </>
         )
