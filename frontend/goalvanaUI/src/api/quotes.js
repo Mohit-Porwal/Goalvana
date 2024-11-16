@@ -5,12 +5,16 @@ const fetchAIResponse = async (prompt) => {
     const response = await axios.post('http://127.0.0.1:5000/api/openai', { prompt });  // Call your backend endpoint
     const data = response.data;
 
-    // Extract response content (adjust based on the backend response structure)
+    // Extract response content
     const fullResponse = data.choices[0].message.content.trim();
-    const quoteMatch = fullResponse.match(/"([^"]+)"/);
-    const quote = quoteMatch ? quoteMatch[1] : fullResponse.split(/1\.\s*|2\.\s*/)[1].trim(); 
 
-    return quote;
+    // Extract all quotes into an array using a regular expression
+    const quoteMatches = fullResponse.match(/"([^"]+)"/g).map(q => q.replace(/"/g, ''));
+
+    // Randomly select a quote
+    const randomQuote = quoteMatches[Math.floor(Math.random() * quoteMatches.length)];
+
+    return randomQuote;
   } catch (error) {
     console.error('Error fetching response from backend:', error);
     return 'Something went wrong, please try again.';
@@ -18,6 +22,30 @@ const fetchAIResponse = async (prompt) => {
 };
 
 export default fetchAIResponse;
+
+
+
+// import axios from 'axios';
+
+// const fetchAIResponse = async (prompt) => {
+//   try {
+//     const response = await axios.post('http://127.0.0.1:5000/api/openai', { prompt });  // Call your backend endpoint
+//     const data = response.data;
+
+//     // Extract response content (adjust based on the backend response structure)
+//     const fullResponse = data.choices[0].message.content.trim();
+//     console.log(fullResponse);
+//     const quoteMatch = fullResponse.match(/"([^"]+)"/);
+//     const quote = quoteMatch ? quoteMatch[1] : fullResponse.split(/1\.\s*|2\.\s*/)[1].trim(); 
+
+//     return quote;
+//   } catch (error) {
+//     console.error('Error fetching response from backend:', error);
+//     return 'Something went wrong, please try again.';
+//   }
+// };
+
+// export default fetchAIResponse;
 
 
 
