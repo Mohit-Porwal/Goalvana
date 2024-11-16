@@ -98,9 +98,9 @@ export default function HomePage() {
       )}
 
       {/* Tabs for switching between Goal Stats and Goal Categories */}
-      <Tabs sx={{marginTop: '100px', marginLeft: '10%'}} value={selectedTab} onChange={handleTabChange} >
-        <Tab label="Goal Stats" />
-        <Tab label="Goal Categories" />
+      <Tabs sx={{marginTop: '100px', marginLeft: '10%', color: 'black'}} value={selectedTab} onChange={handleTabChange} >
+        <Tab label="Goal Stats" sx={{ color: 'black' }}/>
+        <Tab label="Goal Categories" sx={{ color: 'black' }}/>
       </Tabs>
 
       {/* Conditional rendering based on selected tab */}

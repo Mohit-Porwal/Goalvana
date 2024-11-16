@@ -123,9 +123,6 @@ export default function GoalInsights() {
 
     return (
         <Box sx={{ padding: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center',  alignItems: 'center', gap: 3,}}>
-            <Typography variant="h4" gutterBottom sx={{ width: '100%', textAlign: 'center' }}>
-                Goal Insights
-            </Typography>
 
             {loading ? (
                 <Typography>Loading...</Typography>
