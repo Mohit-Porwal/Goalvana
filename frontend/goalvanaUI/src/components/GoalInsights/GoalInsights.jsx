@@ -72,12 +72,12 @@ export default function GoalInsights() {
         const strokeWidth = 15; // Adjust this value to change the thickness of the border
 
         return (
-            <Box sx={{ position: 'relative', width: size, height: size, margin: '8% 16px 0' }}>
+            <Box sx={{ position: 'relative', width: size, height: size, margin: '6% 16px 0', backgroundColor: '' }}>
                 <Card
                     sx={{
                         width: size,
                         height: size,
-                        backgroundColor: 'white',
+                        backgroundColor: 'transparent',
                         borderRadius: '50%',
                         display: 'flex',
                         flexDirection: 'column',
@@ -141,13 +141,13 @@ export default function GoalInsights() {
                     {renderCircularCard(
                         'In Progress',
                         insights.percent_of_in_progress || 0,
-                        'yellow',
+                        '#007BFF',
                         true
                     )}
                     {renderCircularCard(
                         'Completed',
                         insights.percent_of_completed || 0,
-                        'green',
+                        '#28A745',
                         true
                     )}
                 </>
