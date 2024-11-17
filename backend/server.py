@@ -390,10 +390,12 @@ def call_openai():
     payload = {
         'model': 'gpt-4o-mini',
         'messages': [{'role': 'user', 'content': prompt}],
-        'max_tokens': 200
+        'max_tokens': 400,
+        'temperature': 0.8
     }
 
     response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=payload)
+
     if response.status_code == 200:
         return jsonify(response.json())
     else:
