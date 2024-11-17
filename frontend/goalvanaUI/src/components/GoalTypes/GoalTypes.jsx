@@ -98,12 +98,12 @@ const Goals = ({ goalTypeId, goalType, onEdit, onDelete }) => {
     }}>
       <CardContent>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography sx={{ textAlign: 'left' }}>
+          <Typography sx={{ textAlign: 'left', flexGrow: 1 }}>
             <Button onClick={handleClick} sx={{ color: 'black', fontWeight: 'bold', fontSize: 22, textTransform: 'none' }}>
               {goalType}
             </Button>
           </Typography>
-          <Box display="flex" justifyContent="flex-end" alignItems="center">
+          <Box display="flex">
             <IconButton size="small" onClick={handleEdit}>
               <EditIcon />
             </IconButton>

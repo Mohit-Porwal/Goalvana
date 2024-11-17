@@ -10,7 +10,6 @@ export default function GoalsPage() {
 
     return (
     <div>
-        <h1>{goalType ? `${goalType} Goals` : 'Goals'}</h1>
         {goalTypeId ? (
             <>
                 <Goals goalTypeId={goalTypeId} goalType={goalType}/>

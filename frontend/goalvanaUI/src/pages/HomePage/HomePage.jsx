@@ -12,16 +12,15 @@ export default function HomePage() {
   const [newGoalType, setNewGoalType] = useState("");
   const [selectedTab, setSelectedTab] = useState(0);
   const [motivationalQuotes, setMotivationalQuotes] = useState("");
-  const prompt = "Generate engaging and energizing motivational quotes to show on home screen of a goal tracking app.";
+  const prompt = "Generate 20 engaging and energizing motivational quotes to show on home screen of a goal tracking app.";
 
   // Call fetchData in useEffect to fetch data when the component mounts
   useEffect(() => {
-
     // Fetch motivational quote only once on component mount
     const fetchQuote = async () => {
       try {
-        // const aiResponse = await fetchAIResponse(prompt);
-        // setMotivationalQuotes(aiResponse);
+        const aiResponse = await fetchAIResponse(prompt);
+        setMotivationalQuotes(aiResponse);
       } catch (error) {
         console.error("Error fetching motivational quote:", error);
       }
@@ -89,7 +88,7 @@ export default function HomePage() {
     <div style={{ position: 'relative' }}>
       <NavBar/>
 
-            {/* Display AI-generated motivational quotes */}
+      {/* Display AI-generated motivational quotes */}
       {motivationalQuotes && (
         //<div style={{ marginTop: '10px', padding: '10px', backgroundColor: 'white' ,borderRadius: '5px', textAlign: 'center' }}>
         <div

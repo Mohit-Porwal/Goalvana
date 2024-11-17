@@ -17,28 +17,31 @@ const NavBar = () => {
 
   return (
     <AppBar position="static" sx={{ background: 'transparent', padding: '10px 0', boxShadow: 'none' }}>
-      <Toolbar sx={{ maxWidth: '1000px', width: '100%', mx: 'auto' }}>
+      <Toolbar sx={{ maxWidth: '1200px', width: '100%', mx: 'auto', justifyContent: 'space-between', marginTop: '20px' }}>
         
         {/* Logo and App Name */}
-        <Box display="flex" alignItems="center" sx={{ mr: 2 }}>
-          <Avatar src={logo} alt="ScaleHood logo" sx={{ height: 40, width: 40, mr: 1 }} />
+        <Box display="flex" alignItems="center" sx={{ alignItems: 'start' }}>
+          <Avatar src={logo} alt="Goalvana logo" sx={{ height: 40, width: 40, mr: 1 }} />
           <Typography variant="h5" sx={{ color: 'black', fontWeight: 'bold' }}>Goalvana</Typography>
         </Box>
-        
-        {/* Search Bar */}
-        <Search>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search goals"
-            inputProps={{ 'aria-label': 'search' }}
-            value={goals}
-            onChange={(e) => setGoals(e.target.value)}
-            onKeyUp={onSubmit} // Trigger search on Enter
-          />
-        </Search>
-        
+      
+        <Box sx={{ml: 3 }}>
+          {/* Search Bar */}
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search goals"
+              inputProps={{ 'aria-label': 'search' }}
+              value={goals}
+              onChange={(e) => setGoals(e.target.value)}
+              onKeyUp={onSubmit} // Trigger search on Enter
+            />
+          </Search>
+        </Box>
+
+
         {/* User Greeting */}
         <Box sx={{ ml: 'auto' }}>
           <Typography variant="h6" sx={{ color: 'black', fontWeight: 700 }}>Hi Mohit!</Typography>
@@ -51,7 +54,7 @@ const NavBar = () => {
 // Styled Components for Search
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: '20px',
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
@@ -71,6 +74,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  color: 'black'
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -80,13 +84,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
-    color: '#FF3B30',
+    color: 'black',
     [theme.breakpoints.up('md')]: {
       width: '50ch',
     },
     // Red placeholder color
     '&::placeholder': {
-      color: 'white', 
+      color: 'black', 
       opacity: 1,
     },
   },
